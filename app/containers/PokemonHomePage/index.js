@@ -1,17 +1,16 @@
-/*
- * HomePage
+/**
  *
- * This is the first thing users see of our App, at the '/' route
+ * PokemonHomePage
+ *
  */
 
-import React, { useEffect, useState, memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { useInjectReducer } from 'utils/injectReducer';
+import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
-import { makeSelectRepos } from 'containers/App/selectors';
+import { useInjectReducer } from 'utils/injectReducer';
 import { Layout, Menu, Row, Col } from 'antd';
 import {
   EnvironmentOutlined,
@@ -23,40 +22,27 @@ import Banner from '../../components/Banner';
 import PageHeader from '../../components/PageHeader';
 import Trailer from '../../components/Trailer';
 import PokemonItem from '../../components/PokemonItem';
-import { loadRepos } from '../App/actions';
-import { changeUsername, getListPokemon } from './actions';
-import {
-  makeSelectUsername,
-  makeSelectLoading,
+import makeSelectPokemonHomePage, {
   makeSelectPokemonList,
+  makeSelectIsLoading,
 } from './selectors';
+import { getListPokemonAction } from './actions';
 import reducer from './reducer';
 import saga from './saga';
-import './styles.scss';
+import './style.scss';
 
-const key = 'home';
 const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
-
-export function HomePage(props) {
-  const {
-    loading,
-    username,
-    onSubmitForm,
-    pokemonList,
-    onGetListPokemon,
-  } = props;
-  useInjectReducer({ key, reducer });
-  useInjectSaga({ key, saga });
+export function PokemonHomePage(props) {
+  const { isLoading, getListPokemon, pokemonList } = props;
+  useInjectReducer({ key: 'pokemonHomePage', reducer });
+  useInjectSaga({ key: 'pokemonHomePage', saga });
 
   useEffect(() => {
-    // When initial state username is not null, submit the form to load repos
-    if (username && username.trim().length > 0) onSubmitForm();
-    onGetListPokemon();
+    getListPokemon({ limit: 10 });
   }, []);
 
   const [collapsed, setCollapsed] = useState(false);
-
   const onCollapse = () => {
     setCollapsed(!collapsed);
   };
@@ -137,8 +123,8 @@ export function HomePage(props) {
         <PageHeader />
         <Content className="content">
           <Trailer />
-          <PokemonItem />
-          <Row>
+          <PokemonItem listPokemon={pokemonList} />
+          {/* <Row>
             <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
               Col
             </Col>
@@ -148,7 +134,7 @@ export function HomePage(props) {
             <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
               Col
             </Col>
-          </Row>
+          </Row> */}
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Pokemon React JS ©2021 Created by ToanLe
@@ -158,29 +144,22 @@ export function HomePage(props) {
   );
 }
 
-HomePage.propTypes = {
-  loading: PropTypes.bool,
-  onSubmitForm: PropTypes.func,
-  username: PropTypes.string,
+PokemonHomePage.propTypes = {
+  isLoading: PropTypes.bool,
   pokemonList: PropTypes.array,
-  onGetListPokemon: PropTypes.func,
+  getListPokemon: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  repos: makeSelectRepos(),
-  username: makeSelectUsername(),
-  loading: makeSelectLoading(),
+  pokemonHomePage: makeSelectPokemonHomePage(),
+  isLoading: makeSelectIsLoading(),
   pokemonList: makeSelectPokemonList(),
 });
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
-    onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    onSubmitForm: evt => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(loadRepos());
-    },
-    onGetListPokemon: params => dispatch(getListPokemon(params)),
+    dispatch,
+    getListPokemon: params => dispatch(getListPokemonAction(params)),
   };
 }
 
@@ -192,4 +171,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(HomePage);
+)(PokemonHomePage);

@@ -9,8 +9,10 @@ import { Card } from 'antd';
 import './styles.scss';
 
 const { Meta } = Card;
-function PokemonItem() {
-  return (
+function PokemonItem(props) {
+  const { listPokemon } = props;
+  console.log(listPokemon);
+  listPokemon.map(pokemon => (
     <Card
       className="card-pokemon"
       hoverable
@@ -22,9 +24,9 @@ function PokemonItem() {
         />
       }
     >
-      <Meta className="pokemon-name" title="Pokemon" />
+      <Meta className="pokemon-name" title={pokemon.name} />
     </Card>
-  );
+  ));
 }
 
 PokemonItem.propTypes = {};
