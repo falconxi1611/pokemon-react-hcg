@@ -39,14 +39,14 @@ export function PokemonHomePage(props) {
   useInjectSaga({ key: 'pokemonHomePage', saga });
 
   useEffect(() => {
-    getListPokemon({ limit: 10 });
+    getListPokemon();
   }, []);
 
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = () => {
     setCollapsed(!collapsed);
   };
-
+  const style = { background: '#0092ff', padding: '8px 0' };
   const arrGameVersion = [
     {
       key: 0.1,
@@ -123,18 +123,15 @@ export function PokemonHomePage(props) {
         <PageHeader />
         <Content className="content">
           <Trailer />
-          <PokemonItem listPokemon={pokemonList} />
-          {/* <Row>
-            <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-              Col
-            </Col>
-            <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-              Col
-            </Col>
-            <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-              Col
-            </Col>
-          </Row> */}
+          <div className="list-pokemon">
+            <Row>
+              {pokemonList.map(record => (
+                <Col className="gutter-row">
+                  <PokemonItem pokemon={record} />
+                </Col>
+              ))}
+            </Row>
+          </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Pokemon React JS ©2021 Created by ToanLe
@@ -159,7 +156,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    getListPokemon: params => dispatch(getListPokemonAction(params)),
+    getListPokemon: () => dispatch(getListPokemonAction()),
   };
 }
 

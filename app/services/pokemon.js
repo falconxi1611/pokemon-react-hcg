@@ -7,8 +7,18 @@ export default class EmployeeServices {
    *
    * @returns List all pokemon
    */
-  getPokemon = limit =>
-    AxiosInstance.get(`${API_POKEMON}?limit=${limit}`)
+  getPokemon = () =>
+    AxiosInstance.get(`${API_POKEMON}?limit=10`)
+      .then(res => res)
+      .catch(err => err.response || err);
+
+  /**
+   * Get image of pokemon
+   *
+   * @returns List all pokemon
+   */
+  getImagePokemon = link =>
+    AxiosInstance.get(`${link}`)
       .then(res => res)
       .catch(err => err.response || err);
 }

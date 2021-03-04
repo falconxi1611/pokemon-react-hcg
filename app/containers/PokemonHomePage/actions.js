@@ -24,10 +24,9 @@ export function setLoadingAction(flag) {
   };
 }
 
-export function getListPokemonAction(params) {
+export function getListPokemonAction() {
   return {
     type: GET_LIST_POKEMON_ACTION,
-    params,
   };
 }
 

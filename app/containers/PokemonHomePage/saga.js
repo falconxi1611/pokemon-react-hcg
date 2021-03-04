@@ -3,13 +3,23 @@ import PokemonServices from '../../services/pokemon';
 import { GET_LIST_POKEMON_ACTION } from './constants';
 import { setListPokemonAction, setLoadingAction } from './actions';
 
-function* getPokemonListSaga({ limit }) {
+function* getPokemonListSaga() {
   const pokemonServices = new PokemonServices();
   yield put(setLoadingAction(true));
   try {
-    const res = yield call(pokemonServices.getPokemon, limit);
+    const res = yield call(pokemonServices.getPokemon);
     if (res.status === 200) {
-      yield put(setListPokemonAction(res.data.results));
+      const arrResult = [];
+      const arrRes = res.data.results;
+      for (let i = 0; i < arrRes.length; i += 1) {
+        const res2 = yield call(pokemonServices.getImagePokemon, arrRes[i].url);
+        arrResult.push({
+          name: arrRes[i].name,
+          image: res2.data.sprites.other['official-artwork'].front_default,
+        });
+      }
+
+      yield put(setListPokemonAction(arrResult));
     }
   } catch (err) {
     console.log(err);
