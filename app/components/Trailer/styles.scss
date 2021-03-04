@@ -1,0 +1,11 @@
+.trailer {
+  display: inline-flex;
+  text-align: center;
+  border-top: solid 2px #fff;
+  background-color: #001529;
+  iframe {
+    width: 33%;
+    height: 400px;
+    padding: 15px;
+  }
+}

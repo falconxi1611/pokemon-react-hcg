@@ -1,0 +1,15 @@
+.menu {
+  padding-top: 30px;
+
+  .ant-menu-item .anticon,
+  .ant-menu-submenu-title .anticon {
+    font-size: 20px;
+    svg {
+      margin-bottom: 5px;
+    }
+  }
+
+  .content {
+    background-color: #001529;
+  }
+}
