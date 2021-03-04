@@ -13,9 +13,14 @@ function* getPokemonListSaga() {
       const arrRes = res.data.results;
       for (let i = 0; i < arrRes.length; i += 1) {
         const res2 = yield call(pokemonServices.getImagePokemon, arrRes[i].url);
+        console.log(res2);
         arrResult.push({
           name: arrRes[i].name,
           image: res2.data.sprites.other['official-artwork'].front_default,
+          base_experience: res2.data.base_experience,
+          height: res2.data.height,
+          weight: res2.data.weight,
+          types: res2.data.types,
         });
       }
 

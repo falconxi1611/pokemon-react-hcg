@@ -123,15 +123,13 @@ export function PokemonHomePage(props) {
         <PageHeader />
         <Content className="content">
           <Trailer />
-          <div className="list-pokemon">
-            <Row>
-              {pokemonList.map(record => (
-                <Col className="gutter-row">
-                  <PokemonItem pokemon={record} />
-                </Col>
-              ))}
-            </Row>
-          </div>
+          <Row>
+            {pokemonList.map(record => (
+              <Col className="gutter-row">
+                <PokemonItem pokemon={record} />
+              </Col>
+            ))}
+          </Row>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Pokemon React JS ©2021 Created by ToanLe
@@ -140,12 +138,6 @@ export function PokemonHomePage(props) {
     </Layout>
   );
 }
-
-PokemonHomePage.propTypes = {
-  isLoading: PropTypes.bool,
-  pokemonList: PropTypes.array,
-  getListPokemon: PropTypes.func,
-};
 
 const mapStateToProps = createStructuredSelector({
   pokemonHomePage: makeSelectPokemonHomePage(),
